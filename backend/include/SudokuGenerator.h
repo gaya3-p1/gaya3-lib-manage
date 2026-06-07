@@ -4,7 +4,8 @@
 #include <vector>
 
 class SudokuGenerator {
-    std::vector<std::vector<int>> generate(int size, int clues);
+    public:
+        std::vector<std::vector<int>> generate(int size, int clues);
 };
 
 #endif
