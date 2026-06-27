@@ -2,7 +2,9 @@
 A console-based C++ application for managing a library — handling student registration, book borrowing, returns, renewals, and reservations with full CSV-backed persistence.
  
 Books, students, active loans, reservations, and transaction history are stored in flat CSV files in the `data/` directory, so all data persists across sessions.
- 
+
+---  
+
 ## Data Files
  
 | File | Contents |
@@ -12,16 +14,19 @@ Books, students, active loans, reservations, and transaction history are stored 
 | `data/transactions.csv` | Currently active borrows |
 | `data/history.csv` | Completed transactions (returned/renewed) |
 | `data/reservations.csv` | Per-book reservation queues |
- 
-## Loan Policy
- 
+
+---  
+
+## Loan Policy  
+
 | Rule | Value |
 | --- | --- |
 | Default loan period | 14 days |
 | Renewal extension | 7 days |
 | Renewal allowed | Only if no other student has reserved the book |
-| No copies available | Student is automatically added to the reservation queue |
- 
+| No copies available | Student is automatically added to the reservation queue |  
+---  
+
 ## How to Build and Run
  
 ```bash
@@ -40,7 +45,8 @@ make run
 5. Exit
 Enter your choice:
 ```
- 
+---  
+
 ## Walkthrough
  
 ### Registering a new student
@@ -56,7 +62,8 @@ Student registered: Pinninti Gayathri (ID: 24CS10119)
  
 Registration completed, you can now Login.
 ```
- 
+---  
+
 ### Logging in
  
 ```
@@ -78,7 +85,8 @@ Login successful! Welcome, Pinninti Gayathri.
 8. Logout
 =========================================
 ```
- 
+---  
+
 ### Borrowing a book
  
 ```
@@ -89,7 +97,8 @@ Enter ISBN: ISBN067
      Due     : 2026-07-11
      Txn ID  : TXN000004
 ```
- 
+---  
+
 ### Returning a book
  
 ```
@@ -103,7 +112,8 @@ If another student had reserved the book, it is automatically issued to them:
 ```
 Info : Auto-issuing to next reserved student: 24CS11119
 ```
- 
+---  
+
 ### Renewing a book
  
 ```
@@ -111,7 +121,8 @@ Enter choice: 4
 Enter ISBN: ISBN010
 Book renewed. New due date: 2026-07-18
 ```
- 
+---  
+
 ### Reserving a book (no copies available)
  
 ```
@@ -119,7 +130,8 @@ Enter choice: 5
 Enter ISBN: ISBN010
 No copies available. You have been added to the reservation queue.
 ```
- 
+---  
+
 ### Viewing currently borrowed books
  
 ```
@@ -129,7 +141,8 @@ Enter choice: 6
   ISBN: ISBN056 | Title: November 9 | Due: 2026-07-11
   ISBN: ISBN067 | Title: Finding Perfect | Due: 2026-07-11
 ```
- 
+---  
+
 ### Viewing full transaction history
  
 ```
@@ -142,7 +155,8 @@ Enter choice: 7
   [TXN000004] borrow     | Book: Finding Perfect | Borrowed: 2026-06-27 | Due: 2026-07-11
 
 ```
- 
+---  
+
 ### Dashboard (from main menu)
  
 ```
@@ -156,7 +170,8 @@ Enter your choice: 4
 |  Active loans      :           2
 ----------------------------------------------------------
 ```
- 
+---  
+
 ## Class Structure
  
 | Class | Role |
