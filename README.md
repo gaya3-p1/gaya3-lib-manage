@@ -52,7 +52,7 @@ REGISTER HERE.....
 Enter Student ID: 24CS10119
 Enter Name: Pinninti Gayathri
 Enter Password: 12345
-[OK] Student registered: Pinninti Gayathri (ID: 24CS10119)
+Student registered: Pinninti Gayathri (ID: 24CS10119)
  
 Registration completed, you can now Login.
 ```
@@ -65,7 +65,7 @@ Enter your choice: 2
 LOGIN HERE.....
 Enter Student ID: 24CS10119
 Enter Password: 12345
-[OK] Login successful! Welcome, Pinninti Gayathri.
+Login successful! Welcome, Pinninti Gayathri.
  
 ======= Student Menu [Pinninti Gayathri] =======
 1. View all Books
