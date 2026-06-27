@@ -1,5 +1,5 @@
 # Smart Library Management System
-A console-based C++ application for managing a university library — handling student registration, book borrowing, returns, renewals, and reservations with full CSV-backed persistence.
+A console-based C++ application for managing a library — handling student registration, book borrowing, returns, renewals, and reservations with full CSV-backed persistence.
  
 Books, students, active loans, reservations, and transaction history are stored in flat CSV files in the `data/` directory, so all data persists across sessions.
  
