@@ -22,38 +22,38 @@ Transaction* LibrarySystem::findActiveTransaction(const std::string& studentID,
 void LibrarySystem::registerStudent(const std::string& id, const std::string& name,
                                      const std::string& pwd) {
     if (users.count(id)) {
-        std::cout << "[ERROR] Student ID '" << id << "' already exists.\n";
+        std::cout << "ERROR!!! Student ID '" << id << "' already exists.\n";
         return;
     }
     users.emplace(id, Student(id, name, pwd));
     FileManager::saveUsers(users);
-    std::cout << "[OK] Student registered: " << name << " (ID: " << id << ")\n";
+    std::cout << "Student registered: " << name << " (ID: " << id << ")\n";
 }
 
 Student* LibrarySystem::loginStudent(const std::string& id, const std::string& pwd) {
     auto it = users.find(id);
     if (it != users.end() && it->second.authenticate(pwd)) {
-        std::cout << "[OK] Login successful! Welcome, " << it->second.getName() << ".\n";
+        std::cout << "Login successful! Welcome, " << it->second.getName() << ". :)\n";
         return &(it->second);
     }
-    std::cout << "[ERROR] Invalid Student ID or Password.\n";
+    std::cout << "ERROR!!! Invalid Student ID or Password.\n";
     return nullptr;
 }
 
 void LibrarySystem::borrowBook(const std::string& studentID, const std::string& isbn) {
     auto bookIt = books.find(isbn);
     if (bookIt == books.end()) {
-        std::cout << "[ERROR] Book with ISBN '" << isbn << "' not found.\n";
+        std::cout << "ERROR!!! Book with ISBN '" << isbn << "' not found.\n";
         return;
     }
     auto userIt = users.find(studentID);
     if (userIt == users.end()) {
-        std::cout << "[ERROR] Student not found.\n";
+        std::cout << "ERROR!!! Student not found.\n";
         return;
     }
 
     if (userIt->second.hasBorrowed(isbn)) {
-        std::cout << "[ERROR] You have already borrowed this book.\n";
+        std::cout << "ERROR!!! You have already borrowed this book.\n";
         return;
     }
 
@@ -73,7 +73,7 @@ void LibrarySystem::borrowBook(const std::string& studentID, const std::string& 
         FileManager::saveTransactions(activeTransactions);
         FileManager::saveUsers(users);
 
-        std::cout << "[OK] Book borrowed successfully!\n";
+        std::cout << " Book borrowed successfully! :)\n";
         std::cout << "     Title   : " << bookIt->second.getTitle() << "\n";
         std::cout << "     Borrow  : " << borrowDate << "\n";
         std::cout << "     Due     : " << dueDate << "\n";
@@ -83,11 +83,11 @@ void LibrarySystem::borrowBook(const std::string& studentID, const std::string& 
         if (resQueue.getISBN().empty()) resQueue = Reservation(isbn);
 
         if (resQueue.isInQueue(studentID)) {
-            std::cout << "[INFO] You are already in the reservation queue for this book.\n";
+            std::cout << "Info : You are already in the reservation queue for this book.\n";
         } else {
             resQueue.addToQueue(studentID);
             FileManager::saveReservations(reservations);
-            std::cout << "[OK] No copies available. You have been added to the reservation queue.\n";
+            std::cout << "No copies available. You have been added to the reservation queue.\n";
         }
     }
 }
@@ -95,16 +95,16 @@ void LibrarySystem::borrowBook(const std::string& studentID, const std::string& 
 void LibrarySystem::returnBook(const std::string& studentID, const std::string& isbn) {
     auto bookIt = books.find(isbn);
     if (bookIt == books.end()) {
-        std::cout << "[ERROR] Book with ISBN '" << isbn << "' not found.\n";
+        std::cout << "ERROR !!! Book with ISBN '" << isbn << "' not found.\n";
         return;
     }
     auto userIt = users.find(studentID);
     if (userIt == users.end()) {
-        std::cout << "[ERROR] Student not found.\n";
+        std::cout << "ERROR!!! Student not found.\n";
         return;
     }
     if (!userIt->second.hasBorrowed(isbn)) {
-        std::cout << "[ERROR] You have not borrowed this book.\n";
+        std::cout << "ERROR!!! You have not borrowed this book.\n";
         return;
     }
 
@@ -131,13 +131,13 @@ void LibrarySystem::returnBook(const std::string& studentID, const std::string& 
     FileManager::saveTransactions(activeTransactions);
     FileManager::saveUsers(users);
 
-    std::cout << "[OK] Book returned: " << bookIt->second.getTitle() << "\n";
+    std::cout << "Book returned: " << bookIt->second.getTitle() << "\n";
 
     auto resIt = reservations.find(isbn);
     if (resIt != reservations.end() && !resIt->second.isEmpty()) {
         std::string nextStudent = resIt->second.nextStudent();
         FileManager::saveReservations(reservations);
-        std::cout << "[INFO] Auto-issuing to next reserved student: " << nextStudent << "\n";
+        std::cout << "Info : Auto-issuing to next reserved student: " << nextStudent << "\n";
         borrowBook(nextStudent, isbn);
     }
 }
@@ -145,19 +145,19 @@ void LibrarySystem::returnBook(const std::string& studentID, const std::string& 
 void LibrarySystem::renewBook(const std::string& studentID, const std::string& isbn) {
     auto userIt = users.find(studentID);
     if (userIt == users.end() || !userIt->second.hasBorrowed(isbn)) {
-        std::cout << "[ERROR] You have not borrowed this book.\n";
+        std::cout << "ERROR!!! You have not borrowed this book.\n";
         return;
     }
 
     Transaction* txn = findActiveTransaction(studentID, isbn);
     if (!txn) {
-        std::cout << "[ERROR] Active transaction not found.\n";
+        std::cout << "ERROR!!! Active transaction not found.\n";
         return;
     }
 
     auto resIt = reservations.find(isbn);
     if (resIt != reservations.end() && !resIt->second.isEmpty()) {
-        std::cout << "[ERROR] Cannot renew — other students are waiting for this book.\n";
+        std::cout << "ERROR!!! Cannot renew — other students are waiting for this book.\n";
         return;
     }
 
@@ -167,12 +167,12 @@ void LibrarySystem::renewBook(const std::string& studentID, const std::string& i
     FileManager::appendToHistory(*txn);        // record the renewal event
     FileManager::saveTransactions(activeTransactions);
 
-    std::cout << "[OK] Book renewed. New due date: " << newDue << "\n";
+    std::cout << "Book renewed. New due date: " << newDue << "\n";
 }
 
 void LibrarySystem::reserveBook(const std::string& studentID, const std::string& isbn) {
     if (books.find(isbn) == books.end()) {
-        std::cout << "[ERROR] Book with ISBN '" << isbn << "' not found.\n";
+        std::cout << "ERROR!!! Book with ISBN '" << isbn << "' not found.\n";
         return;
     }
 
@@ -180,13 +180,13 @@ void LibrarySystem::reserveBook(const std::string& studentID, const std::string&
     if (resQueue.getISBN().empty()) resQueue = Reservation(isbn);
 
     if (resQueue.isInQueue(studentID)) {
-        std::cout << "[INFO] You are already in the reservation queue.\n";
+        std::cout << "Info : You are already in the reservation queue.\n";
         return;
     }
 
     resQueue.addToQueue(studentID);
     FileManager::saveReservations(reservations);
-    std::cout << "[OK] Reservation placed for ISBN: " << isbn << "\n";
+    std::cout << "Reservation placed for ISBN: " << isbn << "\n";
 }
 
 void LibrarySystem::viewBorrowedBooks(const std::string& studentID) const {
@@ -195,7 +195,7 @@ void LibrarySystem::viewBorrowedBooks(const std::string& studentID) const {
 
     const auto& isbns = userIt->second.getBorrowedISBNs();
     if (isbns.empty()) {
-        std::cout << "[INFO] You have no currently borrowed books.\n";
+        std::cout << "Info : You have no currently borrowed books.\n";
         return;
     }
     std::cout << "\n--- Currently Borrowed Books ---\n";
@@ -245,14 +245,14 @@ void LibrarySystem::showDashboard() const {
         totalCopies += it->second.getCopies();
     }
 
-    std::cout << "\n╔══════════════════════════════════╗\n";
-    std::cout <<   "║     LIBRARY DASHBOARD            ║\n";
-    std::cout <<   "╠══════════════════════════════════╣\n";
-    std::cout <<   "║  Total book titles : " << std::setw(11) << books.size()             << " ║\n";
-    std::cout <<   "║  Total copies avail: " << std::setw(11) << totalCopies              << " ║\n";
-    std::cout <<   "║  Registered students:" << std::setw(10) << users.size()             << "  ║\n";
-    std::cout <<   "║  Active loans      : " << std::setw(11) << activeTransactions.size() << " ║\n";
-    std::cout <<   "╚══════════════════════════════════╝\n";
+    std::cout << "\n---------------------------------------------------------\n";
+    std::cout <<   "|    LIBRARY DASHBOARD\n";
+    std::cout <<   "---------------------------------------------------------\n";
+    std::cout <<   "|  Total book titles : " << std::setw(11) << books.size()             << " \n";
+    std::cout <<   "|  Total copies avail: " << std::setw(11) << totalCopies              << " \n";
+    std::cout <<   "|  Registered students:" << std::setw(10) << users.size()             << " \n";
+    std::cout <<   "|  Active loans      : " << std::setw(11) << activeTransactions.size() << " \n";
+    std::cout <<   "----------------------------------------------------------\n";
 }
 
 void LibrarySystem::showAllBooks() const {
