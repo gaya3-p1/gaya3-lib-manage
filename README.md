@@ -1,5 +1,5 @@
 # Smart Library Management System
-A console-based C++ application for managing a library — handling student registration, book borrowing, returns, renewals, and reservations with full CSV-backed persistence.
+A console-based C++ application for managing a library handling student registration, book borrowing, returns, renewals, and reservations with full CSV-backed persistence.
  
 Books, students, active loans, reservations, and transaction history are stored in flat CSV files in the `data/` directory, so all data persists across sessions.
 
@@ -176,8 +176,8 @@ Enter your choice: 4
  
 | Class | Role |
 | --- | --- |
-| `User` | Abstract base — stores ID, name, password, authentication |
-| `Student` | Extends `User` — tracks currently borrowed ISBNs, student menu |
+| `User` | Abstract base, stores ID, name, password, authentication |
+| `Student` | Extends `User`, tracks currently borrowed ISBNs, student menu |
 | `Book` | Stores ISBN, title, author, category, available copies |
 | `Transaction` | Records a single borrow/renew/return event with dates |
 | `Reservation` | FIFO queue of student IDs waiting for a specific book |
